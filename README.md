@@ -1,2 +1,2 @@
 # ContosoPizza
-An  asp net microsoft tutorial developed by me, monitored by Patrick.
+An asp net web api microsoft tutorial developed by me, monitored by Patrick.
