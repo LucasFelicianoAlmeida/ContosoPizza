@@ -1,6 +1,8 @@
 using ContosoPizza.Models;
 using ContosoPizza.Services;
 using Microsoft.AspNetCore.Mvc;
+using MediatR;
+using ContosoPizza.Mediator.Requests;
 
 namespace ContosoPizza.Controllers;
 
@@ -8,13 +10,14 @@ namespace ContosoPizza.Controllers;
 [Route("[controller]")]
 public class PizzaController : ControllerBase
 {
-    public PizzaController()
+    private readonly IMediator _mediator;
+    public PizzaController(IMediator mediator)
     {
-
+        _mediator = mediator;
     }
 
     [HttpGet]
-    public ActionResult<List<Pizza>> GetAll() => PizzaService.GetAll();
+    public ActionResult<List<Pizza>> GetAll() => Ok(_mediator.Send(PizzaService.GetAll()));
 
     //GetById
     [HttpGet("{id}")]
@@ -28,10 +31,10 @@ public class PizzaController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult Create(Pizza pizza)
+    public async Task<IActionResult> Create([FromBody] CreatePizzaRequest pizzaRequest)
     {
-        PizzaService.Add(pizza);
-        return CreatedAtAction(nameof(Create), new { id = pizza.Id }, pizza);
+        var result = await _mediator.Send(pizzaRequest);
+        return CreatedAtAction(nameof(Create), new { id = pizzaRequest.Id }, result);
     }
 
     [HttpPut("{id}")]

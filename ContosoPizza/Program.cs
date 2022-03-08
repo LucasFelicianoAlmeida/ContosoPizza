@@ -1,3 +1,10 @@
+using System.Reflection;
+using MediatR;
+using FluentValidation.AspNetCore;
+using PipelineBehavior;
+using ContosoPizza.Mediator.Requests;
+using ContosoPizza.Mediator.Responses;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -6,6 +13,14 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+//MediatR DI
+//This warning in GetEntryAssembly will be corrected when pulled request with issue one
+builder.Services.AddMediatR(Assembly.GetEntryAssembly()) 
+.AddFluentValidation();
+
+//PipelineBehavior
+builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidatorBehavior<,>));
 
 var app = builder.Build();
 
