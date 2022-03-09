@@ -14,6 +14,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
+
 //MediatR DI
 //This warning in GetEntryAssembly will be corrected when pulled request with issue one
 builder.Services.AddMediatR(Assembly.GetEntryAssembly()) 
