@@ -30,7 +30,7 @@ namespace ContosoPizza.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Pizza>> Get(int id)
         {
-            var pizzaResponse = await _mediator.Send(new ReadPizzaRequest());
+            var pizzaResponse = await _mediator.Send(new ReadPizzaRequest() { Id= id});
             
             if (pizzaResponse == null)
                 return NotFound();
@@ -42,21 +42,22 @@ namespace ContosoPizza.Controllers
         public async Task<IActionResult> Create([FromBody] CreatePizzaRequest pizzaRequest)
         {
             var result = await _mediator.Send(pizzaRequest);
-            return CreatedAtAction(nameof(Create), new { id = pizzaRequest.Id }, result);
+            var pizza = PizzaStorage.AddPizza(result.Name, result.IsGlutenFree);
+
+            return CreatedAtAction(nameof(Create), new { id = pizzaRequest.Id }, pizza);
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update(int id, Pizza pizza)
+        public async Task<IActionResult> Update(int id, [FromBody]UpdatePizzaRequest  pizza)
         {
+            
             if (id != pizza.Id)
                 return BadRequest();
-
-            var existingPizza = PizzaService.Get(id);
-            if (existingPizza is null)
+            var response = await _mediator.Send(new UpdatePizzaRequest() {Id = id });
+            if (!response )
                 return NotFound();
 
 
-            PizzaService.Update(pizza);
             return NoContent();
         }
 
@@ -64,13 +65,13 @@ namespace ContosoPizza.Controllers
         public async Task<IActionResult> Delete(int id)
         {
 
-            var response = await _mediator.Send(new DeletePizzaRequest());
+            var response = await _mediator.Send(new DeletePizzaRequest() {Id=id });
             if (!response)
             {
                 return NotFound();
             }
 
-            return NoContent();
+            return Ok();
         }
 
     }

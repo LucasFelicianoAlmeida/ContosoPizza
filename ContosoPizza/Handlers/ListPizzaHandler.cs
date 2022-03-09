@@ -10,7 +10,7 @@ namespace ContosoPizza.Handlers
        
        public Task<List<ListPizzaResponse>> Handle(ListPizzaRequest request, CancellationToken cancellationToken)
         {
-            var pizzaList = PizzaStore.Pizzas.Select(p => new ListPizzaResponse 
+            var pizzaList = PizzaStorage.Pizzas.Select(p => new ListPizzaResponse 
             {
                 Id =    p.Id,
                 IsGlutenFree = p.IsGlutenFree,

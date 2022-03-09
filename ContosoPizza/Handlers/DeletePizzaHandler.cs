@@ -11,11 +11,11 @@ namespace ContosoPizza.Handlers
     {
         public Task<bool> Handle(DeletePizzaRequest request, CancellationToken cancellationToken)
         {
-            var pizza = PizzaStore.Pizzas.FirstOrDefault(x => x.Id == request.Id);
+            var pizza = PizzaStorage.Pizzas.FirstOrDefault(x => x.Id == request.Id);
             if (pizza == null)
                 return Task.FromResult(false);
 
-            PizzaStore.Pizzas.Remove(pizza);
+            PizzaStorage.Pizzas.Remove(pizza);
             return Task.FromResult(true);
         }
     }

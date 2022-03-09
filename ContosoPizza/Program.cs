@@ -21,8 +21,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddMediatR(Assembly.GetEntryAssembly()) 
 .AddFluentValidation();
 
-//PipelineBehavior
-builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidatorBehavior<,>));
+////PipelineBehavior
+//builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidatorBehavior<,>));
 
 var app = builder.Build();
 

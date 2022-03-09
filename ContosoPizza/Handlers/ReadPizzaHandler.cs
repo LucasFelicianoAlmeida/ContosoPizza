@@ -12,7 +12,7 @@ namespace ContosoPizza.Handlers
     {
         public Task<ReadPizzaResponse> Handle(ReadPizzaRequest request, CancellationToken cancellationToken)
         {
-            var pizza = PizzaStore.Pizzas.FirstOrDefault(x => x.Id == request.Id);
+            var pizza = PizzaStorage.Pizzas.FirstOrDefault(x => x.Id == request.Id);
             var pizzaResponse = new ReadPizzaResponse() {Id = pizza.Id,Name = pizza.Name,IsGlutenFree = pizza.IsGlutenFree };
             return Task.FromResult(pizzaResponse);
 
