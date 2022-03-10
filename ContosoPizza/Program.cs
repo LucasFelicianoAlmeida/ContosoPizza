@@ -4,6 +4,7 @@ using FluentValidation.AspNetCore;
 using PipelineBehavior;
 using ContosoPizza.Mediator.Requests;
 using ContosoPizza.Mediator.Responses;
+using FluentValidation;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +23,9 @@ builder.Services.AddMediatR(Assembly.GetEntryAssembly())
 
 ////PipelineBehavior
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidatorBehavior<,>));
+
+//Validators
+builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
 var app = builder.Build();
 
