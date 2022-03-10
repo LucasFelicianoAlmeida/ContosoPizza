@@ -1,70 +1,78 @@
 using ContosoPizza.Models;
 using ContosoPizza.Services;
 using Microsoft.AspNetCore.Mvc;
+using MediatR;
+using ContosoPizza.Mediator.Requests;
+using ContosoPizza.Mediator.Commands.Requests;
 
-namespace ContosoPizza.Controllers;
-
-[ApiController]
-[Route("[controller]")]
-public class PizzaController : ControllerBase
+namespace ContosoPizza.Controllers
 {
-    public PizzaController()
+
+
+    [ApiController]
+    [Route("[controller]")]
+    public class PizzaController : ControllerBase
     {
+        private readonly IMediator _mediator;
+        public PizzaController(IMediator mediator)
+        {
+            _mediator = mediator;
+        }
 
-    }
-
-    [HttpGet]
-    public ActionResult<List<Pizza>> GetAll() => PizzaService.GetAll();
-
-    //GetById
-    [HttpGet("{id}")]
-    public ActionResult<Pizza> Get(int id)
-    {
-        var pizza = PizzaService.Get(id);
-        if (pizza == null)
-            return NotFound();
-
-        return pizza;
-    }
-
-    [HttpPost]
-    public IActionResult Create(Pizza pizza)
-    {
-        PizzaService.Add(pizza);
-        return CreatedAtAction(nameof(Create), new { id = pizza.Id }, pizza);
-    }
-
-    [HttpPut("{id}")]
-    public IActionResult Update(int id, Pizza pizza)
-    {
-        if (id != pizza.Id)
-            return BadRequest();
-
-        var existingPizza = PizzaService.Get(id);
-        if (existingPizza is null)
-            return NotFound();
+        [HttpGet]
+        public ActionResult<List<Pizza>> GetAll()
+        {
+            return Ok(_mediator.Send(new ListPizzaRequest()));
+        }
 
 
-            PizzaService.Update(pizza);
+        //GetById
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Pizza>> Get(int id)
+        {
+            var pizzaResponse = await _mediator.Send(new ReadPizzaRequest() { Id= id});
+            
+            if (pizzaResponse == null)
+                return NotFound();
+
+            return Ok(pizzaResponse);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] CreatePizzaRequest pizzaRequest)
+        {
+            var result = await _mediator.Send(pizzaRequest);
+            var pizza = PizzaStorage.AddPizza(result.Name, result.IsGlutenFree);
+
+            return CreatedAtAction(nameof(Create), new { id = pizzaRequest.Id }, pizza);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id, [FromBody]UpdatePizzaRequest  pizza)
+        {
+            
+            if (id != pizza.Id)
+                return BadRequest();
+            var response = await _mediator.Send(new UpdatePizzaRequest() {Id = id });
+            if (!response )
+                return NotFound();
+
+
             return NoContent();
-            //TO STUDY LATER these new action results methods 
-            //https://exceptionnotfound.net/asp-net-core-demystified-action-results/
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+
+            var response = await _mediator.Send(new DeletePizzaRequest() {Id=id });
+            if (!response)
+            {
+                return NotFound();
+            }
+
+            return Ok();
+        }
+
     }
-
-    [HttpDelete("{id}")]
-    public IActionResult Delete(int id)
-    {
-        var pizza = PizzaService.Get(id);
-        if(pizza is null)
-        return NotFound();
-
-        PizzaService.Delete(id);
-
-        return NoContent();
-    }
-
-
-
-
-
 }
