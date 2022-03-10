@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ContosoPizza.Mediator.Commands.Requests
 {
-    public class DeletePizzaRequest: IRequest<bool>
+    public class DeletePizzaRequest : IRequest<bool>
     {
         public int Id { get; set; }
     }

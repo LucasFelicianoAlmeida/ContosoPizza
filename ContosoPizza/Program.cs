@@ -17,12 +17,11 @@ builder.Services.AddSwaggerGen();
 
 
 //MediatR DI
-//This warning in GetEntryAssembly will be corrected when pulled request with issue one
 builder.Services.AddMediatR(Assembly.GetEntryAssembly()) 
 .AddFluentValidation();
 
 ////PipelineBehavior
-//builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidatorBehavior<,>));
+builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidatorBehavior<,>));
 
 var app = builder.Build();
 
