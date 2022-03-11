@@ -12,10 +12,12 @@ namespace ContosoPizza.Handlers
         public Task<bool> Handle(DeletePizzaRequest request, CancellationToken cancellationToken)
         {
             var pizza = PizzaStorage.Pizzas.FirstOrDefault(x => x.Id == request.Id);
+
             if (pizza == null)
                 return Task.FromResult(false);
 
             PizzaStorage.Pizzas.Remove(pizza);
+
             return Task.FromResult(true);
         }
     }

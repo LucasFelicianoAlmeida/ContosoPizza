@@ -1,5 +1,4 @@
 using ContosoPizza.Models;
-using ContosoPizza.Services;
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
 using ContosoPizza.Mediator.Requests;
@@ -20,41 +19,40 @@ namespace ContosoPizza.Controllers
         }
 
         [HttpGet]
-        public ActionResult<List<Pizza>> GetAll()
-        {
-            return Ok(_mediator.Send(new ListPizzaRequest()));
-        }
+        public ActionResult<List<Pizza>> GetAll(CancellationToken cancellationToken) => Ok(_mediator.Send(new ListPizzaRequest(), cancellationToken));
 
 
         //GetById
         [HttpGet("{id}")]
-        public async Task<ActionResult<Pizza>> Get(int id)
+        public async Task<ActionResult<Pizza>> Get(int id, CancellationToken cancellationToken)
         {
-            var pizzaResponse = await _mediator.Send(new ReadPizzaRequest() { Id= id});
-            
-            if (pizzaResponse == null)
+            var response = await _mediator.Send(new ReadPizzaRequest() { Id = id }, cancellationToken);
+
+            if (response == null)
                 return NotFound();
 
-            return Ok(pizzaResponse);
+            return Ok(response);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreatePizzaRequest pizzaRequest)
+        public async Task<IActionResult> Create([FromBody] CreatePizzaRequest pizzaRequest, CancellationToken cancellationToken)
         {
-            var result = await _mediator.Send(pizzaRequest);
-            var pizza = PizzaStorage.AddPizza(result.Name, result.IsGlutenFree);
+            var response = await _mediator.Send(pizzaRequest, cancellationToken);
+            if (!response.Item1)
+            {
+                return BadRequest();
+            }
 
-            return CreatedAtAction(nameof(Create), new { id = pizzaRequest.Id }, pizza);
+            //Item2 in tuple in that case is the pizza id returned
+            return CreatedAtAction(nameof(Create), new { id = response.Item2 });
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody]UpdatePizzaRequest  pizza)
+        public async Task<IActionResult> Update(int id, [FromBody] UpdatePizzaRequest pizza, CancellationToken cancellationToken)
         {
-            
-            if (id != pizza.Id)
-                return BadRequest();
-            var response = await _mediator.Send(new UpdatePizzaRequest() {Id = id });
-            if (!response )
+            var response = await _mediator.Send(new UpdatePizzaRequest() { Id = id }, cancellationToken);
+
+            if (!response)
                 return NotFound();
 
 
@@ -62,14 +60,12 @@ namespace ContosoPizza.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken)
         {
 
-            var response = await _mediator.Send(new DeletePizzaRequest() {Id=id });
+            var response = await _mediator.Send(new DeletePizzaRequest() { Id = id }, cancellationToken);
             if (!response)
-            {
                 return NotFound();
-            }
 
             return Ok();
         }
