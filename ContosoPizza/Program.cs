@@ -1,19 +1,29 @@
 using System.Reflection;
 using MediatR;
 using FluentValidation.AspNetCore;
+using Microsoft.EntityFrameworkCore.Design;
 using PipelineBehavior;
 using ContosoPizza.Mediator.Requests;
 using ContosoPizza.Mediator.Responses;
 using FluentValidation;
+using ContosoPizza.Context;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+{
+    options.UseSqlServer("DefaultConnection");
+});
+
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+
 
 
 
