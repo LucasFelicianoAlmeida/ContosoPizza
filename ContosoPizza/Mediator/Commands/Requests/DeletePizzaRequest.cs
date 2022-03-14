@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +9,7 @@ namespace ContosoPizza.Mediator.Commands.Requests
 {
     public class DeletePizzaRequest : IRequest<bool>
     {
+        [BindNever]
         public int Id { get; set; }
     }
 }
