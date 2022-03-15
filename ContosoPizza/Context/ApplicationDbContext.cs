@@ -9,5 +9,6 @@ namespace ContosoPizza.Context
         {
         }
         public DbSet<Pizza> Pizzas { get; set; }
+        public DbSet<Topping> Toppings { get; set; }
     }
 }
