@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace ContosoPizza.Mediator.Commands.Requests
 {
-    public class CreateToppingRequest : IRequest<(bool,int)>
+    public class CreateToppingRequest : IRequest<bool>
     {
         [BindNever]
         public int Id { get; set; }

@@ -4,22 +4,20 @@ using MediatR;
 
 namespace ContosoPizza.Handlers
 {
-    public class CreateToppingHandler : IRequestHandler<CreateToppingRequest, (bool, int)>
+    public class CreateToppingHandler : IRequestHandler<CreateToppingRequest, bool>
     {
-        public Task<(bool, int)> Handle(CreateToppingRequest request, CancellationToken cancellationToken)
+        public Task<bool > Handle(CreateToppingRequest request, CancellationToken cancellationToken)
         {
             if (request == null)
             {
-                return Task.FromResult((false, 0));
+                return Task.FromResult(false);
             }
 
-            var topping = new Topping() { Name = request.Name, Price = request.Price };
-            ToppingsStorage.Toppings.Add(topping);
+            ToppingsStorage.AddTopping(request);
 
             //Last id added
-            int id = ToppingsStorage.Toppings.LastOrDefault().Id;
 
-            return Task.FromResult((true, id));
+            return Task.FromResult(true);
         }
     }
 }

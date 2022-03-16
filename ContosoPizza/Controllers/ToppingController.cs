@@ -38,12 +38,14 @@ namespace ContosoPizza.Controllers
         {
             var response = await _mediator.Send(request, cancellationToken);
 
-            if (!response.Item1)
+            if (!response)
             {
                 return BadRequest();
             }
 
-            return CreatedAtAction(nameof(Create), new { Ìd = response.Item2 });
+            int id = ToppingsStorage.Toppings.LastOrDefault().Id;
+
+            return CreatedAtAction(nameof(Create), new { Id = id});
         }
 
         [HttpDelete]
@@ -51,7 +53,7 @@ namespace ContosoPizza.Controllers
         public async Task<ActionResult> Delete(int id, CancellationToken cancellationToken)
         {
             var response = await _mediator.Send(new DeleteToppingRequest() { Id = id }, cancellationToken);
-            if (!response.Item1)
+            if (!response)
             {
                 return BadRequest();
             }

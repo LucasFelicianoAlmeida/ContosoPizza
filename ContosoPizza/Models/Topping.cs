@@ -7,10 +7,6 @@
         public string Name { get; set; }
         public decimal Price { get; set; }
 
-        public Topping()
-        {
-            Id = nextId++;
-        }
-
+  
     }
 }

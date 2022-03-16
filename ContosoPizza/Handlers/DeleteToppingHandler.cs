@@ -3,15 +3,15 @@ using MediatR;
 
 namespace ContosoPizza.Handlers
 {
-    public class DeleteToppingHandler : IRequestHandler<DeleteToppingRequest, (bool, int)>
+    public class DeleteToppingHandler : IRequestHandler<DeleteToppingRequest, bool>
     {
-        public Task<(bool, int)> Handle(DeleteToppingRequest request, CancellationToken cancellationToken)
+        public Task<bool> Handle(DeleteToppingRequest request, CancellationToken cancellationToken)
         {
             var result = ToppingsStorage.DeleteTopping(request.Id);
 
-            if (!result) return Task.FromResult((result, 0));
+            if (!result) return Task.FromResult(result);
 
-            return Task.FromResult((result, request.Id));
+            return Task.FromResult(result);
         }
     }
 }
