@@ -15,7 +15,6 @@ namespace ContosoPizza.Handlers
 
             ToppingsStorage.AddTopping(request);
 
-            //Last id added
 
             return Task.FromResult(true);
         }

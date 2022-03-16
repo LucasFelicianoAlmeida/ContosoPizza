@@ -5,7 +5,8 @@ namespace ContosoPizza
 {
     public class ToppingsStorage
     {
-        public static List<Topping> Toppings = new List<Topping>() { new Topping {Id=1, Name = "Sausage",Price = 20 }, new Topping {Id=2,Name = "Pepperoni", Price = 15 } };
+        //public static List<Topping> Toppings = new List<Topping>() { new Topping {Id=1, Name = "Sausage",Price = 20 }, new Topping {Id=2,Name = "Pepperoni", Price = 15 } };
+        public static List<Topping> Toppings = new List<Topping>();
         public static int nextId = Toppings.Count + 1;
 
         public static void AddTopping(CreateToppingRequest request)
