@@ -58,6 +58,7 @@ namespace ContosoPizza.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult> Update(int id, [FromBody] UpdateToppingRequest request, CancellationToken cancellationToken)
         {
+            request.Id = id;
             var response = await _mediator.Send(request, cancellationToken);
 
             if (!response)

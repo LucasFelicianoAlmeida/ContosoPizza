@@ -7,9 +7,6 @@ namespace ContosoPizza.Validators
     {
         public UpdateToppingRequestValidator()
         {
-            RuleFor(x => x.Id)
-                .NotEmpty();
-
             RuleFor(x => x.Name)
                 .NotEmpty();
 

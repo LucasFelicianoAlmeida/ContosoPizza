@@ -5,13 +5,13 @@ namespace ContosoPizza
 {
     public class ToppingsStorage
     {
-        //public static List<Topping> Toppings = new List<Topping>() { new Topping {Id=1, Name = "Sausage",Price = 20 }, new Topping {Id=2,Name = "Pepperoni", Price = 15 } };
         public static List<Topping> Toppings = new List<Topping>();
-        public static int nextId = Toppings.Count + 1;
+        public static int nextId = 1;
 
-        public static void AddTopping(CreateToppingRequest request)
+        public static void AddTopping(Topping topping)
         {
-            var topping = new Topping() { Id = nextId++, Name = request.Name, Price = request.Price };
+            topping.Id = nextId++;
+
             Toppings.Add(topping);
         }
 
@@ -19,23 +19,19 @@ namespace ContosoPizza
         {
             Topping topping = Toppings.FirstOrDefault(x => x.Id == id);
 
-            if(topping == null) return false;
+            if (topping == null) return false;
 
             Toppings.Remove(topping);
 
             return true;
         }
 
-        public static bool UpdateTopping( UpdateToppingRequest request)
+        public static bool UpdateTopping(Topping topping)
         {
-            var topping = Toppings.FirstOrDefault(x => x.Id == request.Id);
 
-            if (topping == null) return false;
-            var index = Toppings.IndexOf(topping);
+            var index = Toppings.FindIndex(0, x => x.Id == topping.Id);
 
-            var toppingUpdated = new Topping() { Id = request.Id, Name = request.Name, Price = request.Price };
-
-            Toppings[index] = toppingUpdated;
+            Toppings[index] = topping;
 
             return true;
         }

@@ -12,8 +12,13 @@ namespace ContosoPizza.Handlers
             {
                 return Task.FromResult(false);
             }
+            var topping = new Topping
+            {
+                Name = request.Name,
+                Price = request.Price
+            };
 
-            ToppingsStorage.AddTopping(request);
+            ToppingsStorage.AddTopping(topping);
 
 
             return Task.FromResult(true);
