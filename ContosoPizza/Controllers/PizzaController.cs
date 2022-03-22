@@ -26,12 +26,20 @@ namespace ContosoPizza.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Pizza>> Get(int id, CancellationToken cancellationToken)
         {
-            var response = await _mediator.Send(new ReadPizzaRequest() { Id = id }, cancellationToken);
+            try
+            {
 
-            if (response == null)
+                var response = await _mediator.Send(new ReadPizzaRequest() { Id = id }, cancellationToken);
+                if (response == null)
+                    return NotFound();
+
+                return Ok(response);
+            }
+            catch (NullReferenceException)
+            {
                 return NotFound();
+            }
 
-            return Ok(response);
         }
 
         [HttpPost]

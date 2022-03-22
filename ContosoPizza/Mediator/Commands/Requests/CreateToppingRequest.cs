@@ -4,13 +4,13 @@ using System.Text.Json.Serialization;
 
 namespace ContosoPizza.Mediator.Commands.Requests
 {
-    public class UpdatePizzaRequest : IRequest<bool>
+    public class CreateToppingRequest : IRequest<bool>
     {
-        [BindNever]
         [JsonIgnore]
+        [BindNever]
         public int Id { get; set; }
         public string Name { get; set; }
         public decimal Price { get; set; }
-        public bool IsGlutenFree { get; set; }
+
     }
 }

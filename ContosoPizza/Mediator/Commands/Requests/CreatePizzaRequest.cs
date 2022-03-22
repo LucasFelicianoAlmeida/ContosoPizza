@@ -1,10 +1,12 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System.Text.Json.Serialization;
 
 namespace ContosoPizza.Mediator.Requests
 {
     public class CreatePizzaRequest : IRequest<(bool, int)>
     {
+        [JsonIgnore]
         [BindNever]
         public int Id { get; set; }
         public string Name { get; set; }
