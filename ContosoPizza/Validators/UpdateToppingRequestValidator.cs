@@ -10,9 +10,7 @@ namespace ContosoPizza.Validators
             RuleFor(x => x.Name)
                 .NotEmpty();
 
-            RuleFor(x => x.Price)
-                .NotEmpty();
-
+            RuleFor(x => x.Price >= 0);
         }
     }
 }

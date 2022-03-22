@@ -8,11 +8,9 @@ namespace ContosoPizza.Handlers
     {
         public Task<bool> Handle(UpdateToppingRequest request, CancellationToken cancellationToken)
         {
-            var topping = ToppingsStorage.Toppings.Select(x => new Topping 
-            { Id = x.Id,
-            Name = x.Name,
-             Price = x.Price
-            }).FirstOrDefault(x => x.Id == request.Id);
+            var topping = ToppingsStorage.Toppings.FirstOrDefault(x => x.Id == request.Id);
+
+            if(topping == null) return Task.FromResult(false);
 
             topping.Name = request.Name;
             topping.Price = request.Price;
