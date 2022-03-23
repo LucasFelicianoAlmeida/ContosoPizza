@@ -1,4 +1,5 @@
-﻿using ContosoPizza.Mediator.Commands.Requests;
+﻿using ContosoPizza.Context;
+using ContosoPizza.Mediator.Commands.Requests;
 using ContosoPizza.Models;
 using MediatR;
 
@@ -6,18 +7,28 @@ namespace ContosoPizza.Handlers
 {
     public class UpdatePizzaHandler : IRequestHandler<UpdatePizzaRequest, bool>
     {
-        public Task<bool> Handle(UpdatePizzaRequest request, CancellationToken cancellationToken)
+        public ApplicationDbContext _context;
+
+        public UpdatePizzaHandler(ApplicationDbContext context)
         {
-            var pizza = PizzaStorage.Pizzas.FirstOrDefault(x => x.Id == request.Id);
+            _context = context;
+        }
+        public async Task<bool> Handle(UpdatePizzaRequest request, CancellationToken cancellationToken)
+        {
+            var pizza = _context.Pizzas.FirstOrDefault(x => x.Id == request.Id);
+
             if (pizza == null)
-                return Task.FromResult( false);
+                return false;
 
             pizza.Name = request.Name;
             pizza.IsGlutenFree = request.IsGlutenFree;
+            pizza.Price = request.Price;
 
-            var result = PizzaStorage.UpdatePizza(pizza);
+            _context.Pizzas.Update(pizza);
 
-            return Task.FromResult(result);
+            await _context.SaveChangesAsync(); 
+
+            return true;
 
         }
     }

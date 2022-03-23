@@ -1,4 +1,5 @@
-﻿using ContosoPizza.Mediator.Commands.Requests;
+﻿using ContosoPizza.Context;
+using ContosoPizza.Mediator.Commands.Requests;
 using ContosoPizza.Mediator.Commands.Responses;
 using MediatR;
 
@@ -6,9 +7,15 @@ namespace ContosoPizza.Handlers
 {
     public class ReadToppingHandler : IRequestHandler<ReadToppingRequest, ReadToppingResponse>
     {
+        public ApplicationDbContext _context;
+
+        public ReadToppingHandler(ApplicationDbContext context)
+        {
+            _context = context;
+        }
         public Task<ReadToppingResponse> Handle(ReadToppingRequest request, CancellationToken cancellationToken)
         {
-            var topping = ToppingsStorage.Toppings.FirstOrDefault(x => x.Id == request.Id);
+            var topping = _context.Toppings.FirstOrDefault(x => x.Id == request.Id);
 
             if (topping == null) return null;
 

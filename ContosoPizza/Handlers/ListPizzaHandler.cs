@@ -1,4 +1,5 @@
 
+using ContosoPizza.Context;
 using ContosoPizza.Mediator.Requests;
 using ContosoPizza.Mediator.Responses;
 using MediatR;
@@ -7,17 +8,26 @@ namespace ContosoPizza.Handlers
 {
     public class ListPizzaHandler : IRequestHandler<ListPizzaRequest, List<ListPizzaResponse>>
     {
+        public ApplicationDbContext _context;
+
+        public ListPizzaHandler(ApplicationDbContext context)
+        {
+            _context = context;
+        }
+
 
         public Task<List<ListPizzaResponse>> Handle(ListPizzaRequest request, CancellationToken cancellationToken)
         {
-            var pizzaList = PizzaStorage.Pizzas.Select(p => new ListPizzaResponse
+
+            var pizzas = _context.Pizzas.Select(p => new ListPizzaResponse
             {
                 Id = p.Id,
                 IsGlutenFree = p.IsGlutenFree,
-                Name = p.Name
+                Name = p.Name,
+                Price = p.Price
             }).ToList();
 
-            return Task.FromResult(pizzaList);
+            return Task.FromResult(pizzas);
         }
     }
 }

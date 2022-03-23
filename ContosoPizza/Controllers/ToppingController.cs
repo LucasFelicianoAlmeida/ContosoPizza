@@ -35,12 +35,11 @@ namespace ContosoPizza.Controllers
         {
             var response = await _mediator.Send(request, cancellationToken);
 
-            if (!response)
+            if (!response.Item1)
                 return BadRequest();
 
-            int id = ToppingsStorage.Toppings.LastOrDefault().Id;
 
-            return CreatedAtAction(nameof(Create), new { Id = id });
+            return CreatedAtAction(nameof(Create), new { Id = response.Item2 });
         }
 
 
