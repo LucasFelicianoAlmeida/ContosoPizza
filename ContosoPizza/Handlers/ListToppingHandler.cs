@@ -3,6 +3,7 @@ using ContosoPizza.Mediator.Commands.Requests;
 using ContosoPizza.Mediator.Commands.Responses;
 using ContosoPizza.Models;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace ContosoPizza.Handlers
 {
@@ -14,16 +15,16 @@ namespace ContosoPizza.Handlers
         {
             _context = context;
         }
-        public Task<List<ListToppingResponse>> Handle(ListToppingRequest request, CancellationToken cancellationToken)
+        public async Task<List<ListToppingResponse>> Handle(ListToppingRequest request, CancellationToken cancellationToken)
         {
-            var listToppings = _context.Toppings.Select(t => new ListToppingResponse
+            var listToppings = await _context.Toppings.Select(t => new ListToppingResponse
             {
                 Id = t.Id, 
                 Name = t.Name,
                 Price = t.Price
-            }).ToList();
+            }).ToListAsync();
 
-            return Task.FromResult(listToppings);
+            return listToppings;
         }
     }
 }

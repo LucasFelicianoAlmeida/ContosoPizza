@@ -2,6 +2,7 @@
 using ContosoPizza.Mediator.Commands.Requests;
 using ContosoPizza.Models;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace ContosoPizza.Handlers
 {
@@ -15,7 +16,7 @@ namespace ContosoPizza.Handlers
         }
         public async Task<bool> Handle(UpdatePizzaRequest request, CancellationToken cancellationToken)
         {
-            var pizza = _context.Pizzas.FirstOrDefault(x => x.Id == request.Id);
+            var pizza = await _context.Pizzas.FirstOrDefaultAsync(x => x.Id == request.Id);
 
             if (pizza == null)
                 return false;
@@ -26,7 +27,7 @@ namespace ContosoPizza.Handlers
 
             _context.Pizzas.Update(pizza);
 
-            await _context.SaveChangesAsync(); 
+            await _context.SaveChangesAsync(cancellationToken); 
 
             return true;
 

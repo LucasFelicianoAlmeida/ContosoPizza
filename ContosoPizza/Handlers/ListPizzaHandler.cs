@@ -3,6 +3,7 @@ using ContosoPizza.Context;
 using ContosoPizza.Mediator.Requests;
 using ContosoPizza.Mediator.Responses;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace ContosoPizza.Handlers
 {
@@ -16,18 +17,18 @@ namespace ContosoPizza.Handlers
         }
 
 
-        public Task<List<ListPizzaResponse>> Handle(ListPizzaRequest request, CancellationToken cancellationToken)
+        public async Task<List<ListPizzaResponse>> Handle(ListPizzaRequest request, CancellationToken cancellationToken)
         {
 
-            var pizzas = _context.Pizzas.Select(p => new ListPizzaResponse
+            var pizzas = await  _context.Pizzas.Select(p => new ListPizzaResponse
             {
                 Id = p.Id,
                 IsGlutenFree = p.IsGlutenFree,
                 Name = p.Name,
                 Price = p.Price
-            }).ToList();
+            }).ToListAsync();
 
-            return Task.FromResult(pizzas);
+            return  pizzas;
         }
     }
 }

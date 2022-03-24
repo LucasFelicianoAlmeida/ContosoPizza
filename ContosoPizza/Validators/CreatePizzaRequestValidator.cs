@@ -8,9 +8,6 @@ namespace ContosoPizza.Validators
         public CreatePizzaRequestValidator()
         {
 
-            RuleFor(x => x.IsGlutenFree)
-                .NotEmpty();
-
             RuleFor(x => x.Name)
                 .NotEmpty();
         }
