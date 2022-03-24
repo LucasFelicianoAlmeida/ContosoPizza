@@ -18,8 +18,7 @@ namespace ContosoPizza.Handlers
         {
             var pizza = await _context.Pizzas.FirstOrDefaultAsync(x => x.Id == request.Id);
 
-            if (pizza == null)
-                return false;
+            if (pizza == null) return false;
 
             pizza.Name = request.Name;
             pizza.IsGlutenFree = request.IsGlutenFree;
