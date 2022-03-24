@@ -2,23 +2,36 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ContosoPizza.Context;
 using ContosoPizza.Mediator.Commands.Requests;
 using ContosoPizza.Mediator.Commands.Responses;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
+
 namespace ContosoPizza.Handlers
 {
     public class DeletePizzaHandler : IRequestHandler<DeletePizzaRequest, bool>
     {
-        public Task<bool> Handle(DeletePizzaRequest request, CancellationToken cancellationToken)
+        public ApplicationDbContext _context;
+        public DeletePizzaHandler(ApplicationDbContext context)
         {
-            var pizza = PizzaStorage.Pizzas.FirstOrDefault(x => x.Id == request.Id);
+            _context = context;
+        }
+
+
+        public async Task<bool> Handle(DeletePizzaRequest request, CancellationToken cancellationToken)
+        {
+            var pizza = await _context.Pizzas.FirstOrDefaultAsync(x => x.Id == request.Id);
 
             if (pizza == null)
-                return Task.FromResult(false);
+                return false;
 
-            PizzaStorage.Pizzas.Remove(pizza);
+            _context.Pizzas.Remove(pizza);
 
-            return Task.FromResult(true);
+            await _context.SaveChangesAsync(cancellationToken);
+
+
+            return true;
         }
     }
 }

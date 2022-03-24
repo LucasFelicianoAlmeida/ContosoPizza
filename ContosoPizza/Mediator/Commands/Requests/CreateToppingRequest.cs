@@ -4,11 +4,8 @@ using System.Text.Json.Serialization;
 
 namespace ContosoPizza.Mediator.Commands.Requests
 {
-    public class CreateToppingRequest : IRequest<bool>
+    public class CreateToppingRequest : IRequest<(bool,int)>
     {
-        [JsonIgnore]
-        [BindNever]
-        public int Id { get; set; }
         public string Name { get; set; }
         public decimal Price { get; set; }
 

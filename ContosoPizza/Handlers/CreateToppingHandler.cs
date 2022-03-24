@@ -1,27 +1,31 @@
-﻿using ContosoPizza.Mediator.Commands.Requests;
+﻿using ContosoPizza.Context;
+using ContosoPizza.Mediator.Commands.Requests;
 using ContosoPizza.Models;
 using MediatR;
 
 namespace ContosoPizza.Handlers
 {
-    public class CreateToppingHandler : IRequestHandler<CreateToppingRequest, bool>
+    public class CreateToppingHandler : IRequestHandler<CreateToppingRequest, (bool,int)>
     {
-        public Task<bool > Handle(CreateToppingRequest request, CancellationToken cancellationToken)
+        public ApplicationDbContext _context;
+        public CreateToppingHandler(ApplicationDbContext context)
+        {
+            _context = context;
+        }
+
+
+        public async Task<(bool,int)> Handle(CreateToppingRequest request, CancellationToken cancellationToken)
         {
             if (request == null)
-            {
-                return Task.FromResult(false);
-            }
-            var topping = new Topping
-            {
-                Name = request.Name,
-                Price = request.Price
-            };
+                return (false,0);
 
-            ToppingsStorage.AddTopping(topping);
+            var topping = new Topping(request.Name, request.Price);
 
+            _context.Toppings.Add(topping);
 
-            return Task.FromResult(true);
+            await _context.SaveChangesAsync(cancellationToken);
+
+            return (true,topping.Id);
         }
     }
 }

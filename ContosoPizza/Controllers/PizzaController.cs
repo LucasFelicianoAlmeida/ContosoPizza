@@ -19,7 +19,7 @@ namespace ContosoPizza.Controllers
         }
 
         [HttpGet]
-        public ActionResult<List<Pizza>> GetAll(CancellationToken cancellationToken) => Ok(_mediator.Send(new ListPizzaRequest(), cancellationToken));
+        public async Task<ActionResult<List<Pizza>>> GetAll(CancellationToken cancellationToken) => Ok(await _mediator.Send(new ListPizzaRequest(), cancellationToken));
 
 
         //GetById
@@ -58,13 +58,14 @@ namespace ContosoPizza.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] UpdatePizzaRequest pizza, CancellationToken cancellationToken)
         {
-            var response = await _mediator.Send(new UpdatePizzaRequest() { Id = id }, cancellationToken);
+            pizza.Id = id;
+            var response = await _mediator.Send(pizza, cancellationToken);
 
             if (!response)
                 return NotFound();
 
 
-            return NoContent();
+            return Ok();
         }
 
         [HttpDelete("{id}")]

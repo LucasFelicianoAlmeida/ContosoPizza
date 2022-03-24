@@ -1,23 +1,34 @@
 
+using ContosoPizza.Context;
 using ContosoPizza.Mediator.Requests;
 using ContosoPizza.Mediator.Responses;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace ContosoPizza.Handlers
 {
     public class ListPizzaHandler : IRequestHandler<ListPizzaRequest, List<ListPizzaResponse>>
     {
+        public ApplicationDbContext _context;
 
-        public Task<List<ListPizzaResponse>> Handle(ListPizzaRequest request, CancellationToken cancellationToken)
+        public ListPizzaHandler(ApplicationDbContext context)
         {
-            var pizzaList = PizzaStorage.Pizzas.Select(p => new ListPizzaResponse
+            _context = context;
+        }
+
+
+        public async Task<List<ListPizzaResponse>> Handle(ListPizzaRequest request, CancellationToken cancellationToken)
+        {
+
+            var pizzas = await  _context.Pizzas.Select(p => new ListPizzaResponse
             {
                 Id = p.Id,
                 IsGlutenFree = p.IsGlutenFree,
-                Name = p.Name
-            }).ToList();
+                Name = p.Name,
+                Price = p.Price
+            }).ToListAsync();
 
-            return Task.FromResult(pizzaList);
+            return  pizzas;
         }
     }
 }

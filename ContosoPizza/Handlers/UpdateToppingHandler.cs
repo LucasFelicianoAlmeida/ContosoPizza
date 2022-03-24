@@ -1,23 +1,33 @@
-﻿using ContosoPizza.Mediator.Commands.Requests;
+﻿using ContosoPizza.Context;
+using ContosoPizza.Mediator.Commands.Requests;
 using ContosoPizza.Models;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace ContosoPizza.Handlers
 {
     public class UpdateToppingHandler : IRequestHandler<UpdateToppingRequest, bool>
     {
-        public Task<bool> Handle(UpdateToppingRequest request, CancellationToken cancellationToken)
-        {
-            var topping = ToppingsStorage.Toppings.FirstOrDefault(x => x.Id == request.Id);
+        public ApplicationDbContext _context;
 
-            if(topping == null) return Task.FromResult(false);
+        public UpdateToppingHandler(ApplicationDbContext context)
+        {
+            _context = context;
+        }
+        public async Task<bool> Handle(UpdateToppingRequest request, CancellationToken cancellationToken)
+        {
+            var topping = await _context.Toppings.FirstOrDefaultAsync(x => x.Id == request.Id);
+
+            if(topping == null) return false;
 
             topping.Name = request.Name;
             topping.Price = request.Price;
 
-            var response = ToppingsStorage.UpdateTopping(topping);
+            _context.Toppings.Update(topping);
 
-            return Task.FromResult(response);
+            await _context.SaveChangesAsync(cancellationToken);
+
+            return true;
         }
     }
 }
