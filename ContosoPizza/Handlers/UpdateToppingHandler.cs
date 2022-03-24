@@ -3,10 +3,12 @@ using ContosoPizza.Mediator.Commands.Requests;
 using ContosoPizza.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Nudes.Retornator.AspnetCore.Errors;
+using Nudes.Retornator.Core;
 
 namespace ContosoPizza.Handlers
 {
-    public class UpdateToppingHandler : IRequestHandler<UpdateToppingRequest, bool>
+    public class UpdateToppingHandler : IRequestHandler<UpdateToppingRequest, Result>
     {
         public ApplicationDbContext _context;
 
@@ -14,11 +16,12 @@ namespace ContosoPizza.Handlers
         {
             _context = context;
         }
-        public async Task<bool> Handle(UpdateToppingRequest request, CancellationToken cancellationToken)
+        public async Task<Result> Handle(UpdateToppingRequest request, CancellationToken cancellationToken)
         {
-            var topping = await _context.Toppings.FirstOrDefaultAsync(x => x.Id == request.Id);
+            var topping = await _context.Toppings.FirstOrDefaultAsync(x => x.Id == request.Id,cancellationToken);
 
-            if(topping == null) return false;
+            if(topping == null)
+                return new NotFoundError();
 
             topping.Name = request.Name;
             topping.Price = request.Price;
@@ -27,7 +30,7 @@ namespace ContosoPizza.Handlers
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return true;
+            return Result.Success;
         }
     }
 }

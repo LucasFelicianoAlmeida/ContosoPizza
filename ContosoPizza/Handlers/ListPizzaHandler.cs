@@ -4,10 +4,11 @@ using ContosoPizza.Mediator.Requests;
 using ContosoPizza.Mediator.Responses;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Nudes.Retornator.Core;
 
 namespace ContosoPizza.Handlers
 {
-    public class ListPizzaHandler : IRequestHandler<ListPizzaRequest, List<ListPizzaResponse>>
+    public class ListPizzaHandler : IRequestHandler<ListPizzaRequest, ResultOf<List<ListPizzaResponse>>>
     {
         public ApplicationDbContext _context;
 
@@ -17,7 +18,7 @@ namespace ContosoPizza.Handlers
         }
 
 
-        public async Task<List<ListPizzaResponse>> Handle(ListPizzaRequest request, CancellationToken cancellationToken)
+        public async Task<ResultOf<List<ListPizzaResponse>>> Handle(ListPizzaRequest request, CancellationToken cancellationToken)
         {
 
             var pizzas = await  _context.Pizzas.Select(p => new ListPizzaResponse
@@ -26,7 +27,7 @@ namespace ContosoPizza.Handlers
                 IsGlutenFree = p.IsGlutenFree,
                 Name = p.Name,
                 Price = p.Price
-            }).ToListAsync();
+            }).ToListAsync(cancellationToken);
 
             return  pizzas;
         }

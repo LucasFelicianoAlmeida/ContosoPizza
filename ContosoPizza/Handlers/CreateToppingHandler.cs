@@ -2,10 +2,12 @@
 using ContosoPizza.Mediator.Commands.Requests;
 using ContosoPizza.Models;
 using MediatR;
+using Nudes.Retornator.AspnetCore.Errors;
+using Nudes.Retornator.Core;
 
 namespace ContosoPizza.Handlers
 {
-    public class CreateToppingHandler : IRequestHandler<CreateToppingRequest, (bool,int)>
+    public class CreateToppingHandler : IRequestHandler<CreateToppingRequest, ResultOf<bool>>
     {
         public ApplicationDbContext _context;
         public CreateToppingHandler(ApplicationDbContext context)
@@ -14,18 +16,20 @@ namespace ContosoPizza.Handlers
         }
 
 
-        public async Task<(bool,int)> Handle(CreateToppingRequest request, CancellationToken cancellationToken)
+        public async Task<ResultOf<bool>> Handle(CreateToppingRequest request, CancellationToken cancellationToken)
         {
-            if (request == null)
-                return (false,0);
 
             var topping = new Topping(request.Name, request.Price);
 
             _context.Toppings.Add(topping);
 
-            await _context.SaveChangesAsync(cancellationToken);
+            try
+            {
+                await _context.SaveChangesAsync(cancellationToken);
 
-            return (true,topping.Id);
+                return true;
+            }
+            catch (Exception) { return new BadRequestError(); }
         }
     }
 }

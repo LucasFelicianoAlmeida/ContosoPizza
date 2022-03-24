@@ -1,7 +1,9 @@
 ﻿using ContosoPizza.Mediator.Commands.Requests;
+using ContosoPizza.Mediator.Commands.Responses;
 using ContosoPizza.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Nudes.Retornator.Core;
 
 namespace ContosoPizza.Controllers
 {
@@ -18,53 +20,28 @@ namespace ContosoPizza.Controllers
         [HttpGet]
         public async Task<ActionResult<List<Topping>>> GetAll(CancellationToken cancellationToken) => Ok(await _mediator.Send(new ListToppingRequest(), cancellationToken));
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult> Get([FromRoute] int id, CancellationToken cancellationToken)
-        {
-            var response = await _mediator.Send(new ReadToppingRequest() { Id = id });
+        [HttpGet("{Id}")]
+        public  Task<ResultOf<ReadToppingResponse>> Get([FromRoute] ReadToppingRequest request, CancellationToken cancellationToken) =>   _mediator.Send(request,cancellationToken);
 
-            if (response == null)
-                return NotFound();
-
-            return Ok(response);
-        }
 
 
         [HttpPost]
-        public async Task<ActionResult> Create([FromBody] CreateToppingRequest request, CancellationToken cancellationToken)
-        {
-            var response = await _mediator.Send(request, cancellationToken);
-
-            if (!response.Item1)
-                return BadRequest();
-
-
-            return CreatedAtAction(nameof(Create), new { Id = response.Item2 });
-        }
+        public  Task<ResultOf<bool>> Create([FromBody] CreateToppingRequest request, CancellationToken cancellationToken) => _mediator.Send(request, cancellationToken);
 
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete([FromRoute] int id, CancellationToken cancellationToken)
-        {
-            var response = await _mediator.Send(new DeleteToppingRequest() { Id = id }, cancellationToken);
+        public  Task<Result> Delete([FromRoute] int id, CancellationToken cancellationToken) => _mediator.Send(new DeleteToppingRequest() { Id = id }, cancellationToken);
 
-            if (!response)
-                return BadRequest();
-
-            return Ok();
-        }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> Update(int id, [FromBody] UpdateToppingRequest request, CancellationToken cancellationToken)
+        public  Task<Result> Update(int id, [FromBody] UpdateToppingRequest request, CancellationToken cancellationToken)
         {
             request.Id = id;
-            var response = await _mediator.Send(request, cancellationToken);
-
-            if (!response)
-                return BadRequest();
-
-            return Ok();
+            return _mediator.Send(request, cancellationToken);
         }
+            
+
+      
 
 
     }

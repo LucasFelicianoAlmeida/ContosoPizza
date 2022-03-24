@@ -1,10 +1,11 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Nudes.Retornator.Core;
 using System.Text.Json.Serialization;
 
 namespace ContosoPizza.Mediator.Commands.Requests
 {
-    public class UpdateToppingRequest : IRequest<bool>
+    public class UpdateToppingRequest : IRequest<Result>
     {
         [JsonIgnore]
         [BindNever]

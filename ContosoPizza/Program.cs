@@ -8,6 +8,7 @@ using ContosoPizza.Mediator.Responses;
 using FluentValidation;
 using ContosoPizza.Context;
 using Microsoft.EntityFrameworkCore;
+using Nudes.Retornator.AspnetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,9 +25,10 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+//Retornator
+builder.Services.AddControllers().AddRetornator();
 
-
-
+builder.Services.AddErrorTranslator(ErrorHttpTranslatorBuilder.Default);
 
 //MediatR DI
 builder.Services.AddMediatR(Assembly.GetEntryAssembly()) 
