@@ -29,7 +29,7 @@ namespace ContosoPizza.Handlers
 
                 return true;
             }
-            catch (Exception) { return new BadRequestError(); }
+            catch (Exception) { return new ServiceUnavaiableError("CreateToppingHandler"); }
         }
     }
 }
