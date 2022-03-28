@@ -23,13 +23,11 @@ namespace ContosoPizza.Handlers
 
             _context.Toppings.Add(topping);
 
-            try
-            {
-                await _context.SaveChangesAsync(cancellationToken);
 
-                return true;
-            }
-            catch (Exception) { return new ServiceUnavaiableError("CreateToppingHandler"); }
+            await _context.SaveChangesAsync(cancellationToken);
+
+            return true;
+
         }
     }
 }

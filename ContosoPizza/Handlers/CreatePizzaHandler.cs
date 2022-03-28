@@ -17,16 +17,14 @@ namespace ContosoPizza.Handlers
         }
         public async Task<ResultOf<bool>> Handle(CreatePizzaRequest request, CancellationToken cancellationToken)
         {
-            var pizza = new Pizza(request.Name,request.Price,request.IsGlutenFree);
+            var pizza = new Pizza(request.Name, request.Price, request.IsGlutenFree);
 
             _context.Pizzas.Add(pizza);
-            try
-            {
-                await _context.SaveChangesAsync(cancellationToken);
 
-                return true;
-            }
-            catch (Exception) { return new ServiceUnavaiableError("CreatePizzaHandler"); }
+            await _context.SaveChangesAsync(cancellationToken);
+
+            return true;
+
 
         }
     }
