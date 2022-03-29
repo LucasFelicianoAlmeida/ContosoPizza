@@ -7,10 +7,12 @@ using ContosoPizza.Mediator.Commands.Requests;
 using ContosoPizza.Mediator.Commands.Responses;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Nudes.Retornator.AspnetCore.Errors;
+using Nudes.Retornator.Core;
 
 namespace ContosoPizza.Handlers
 {
-    public class ReadPizzaHandler : IRequestHandler<ReadPizzaRequest, ReadPizzaResponse>
+    public class ReadPizzaHandler : IRequestHandler<ReadPizzaRequest, ResultOf<ReadPizzaResponse>>
     {
         public ApplicationDbContext _context;
 
@@ -18,12 +20,12 @@ namespace ContosoPizza.Handlers
         {
             _context = context;
         }
-        public async Task<ReadPizzaResponse> Handle(ReadPizzaRequest request, CancellationToken cancellationToken)
+        public async Task<ResultOf<ReadPizzaResponse>> Handle(ReadPizzaRequest request, CancellationToken cancellationToken)
         {
-            var pizza = await _context.Pizzas.FirstOrDefaultAsync(x => x.Id == request.Id);
+            var pizza = await _context.Pizzas.FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
 
             if (pizza == null)
-                return null;
+                return new NotFoundError();
 
             var pizzaResponse = new ReadPizzaResponse() { Id = pizza.Id, Name = pizza.Name, IsGlutenFree = pizza.IsGlutenFree };
 

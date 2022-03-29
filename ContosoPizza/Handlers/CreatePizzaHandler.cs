@@ -2,10 +2,12 @@ using ContosoPizza.Context;
 using ContosoPizza.Mediator.Requests;
 using ContosoPizza.Models;
 using MediatR;
+using Nudes.Retornator.AspnetCore.Errors;
+using Nudes.Retornator.Core;
 
 namespace ContosoPizza.Handlers
 {
-    public class CreatePizzaHandler : IRequestHandler<CreatePizzaRequest, (bool,int)>
+    public class CreatePizzaHandler : IRequestHandler<CreatePizzaRequest, Result>
     {
 
         private ApplicationDbContext _context;
@@ -13,15 +15,17 @@ namespace ContosoPizza.Handlers
         {
             _context = context;
         }
-        public async Task<(bool,int)> Handle(CreatePizzaRequest request, CancellationToken cancellationToken)
+        public async Task<Result> Handle(CreatePizzaRequest request, CancellationToken cancellationToken)
         {
-            var pizza = new Pizza(request.Name,request.Price,request.IsGlutenFree);
+            var pizza = new Pizza(request.Name, request.Price, request.IsGlutenFree);
 
             _context.Pizzas.Add(pizza);
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return (true,pizza.Id);
+            return Result.Success;
+
+
         }
     }
 }
