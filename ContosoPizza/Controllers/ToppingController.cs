@@ -26,7 +26,7 @@ namespace ContosoPizza.Controllers
 
 
         [HttpPost]
-        public  Task<ResultOf<bool>> Create([FromBody] CreateToppingRequest request, CancellationToken cancellationToken) => _mediator.Send(request, cancellationToken);
+        public  Task<Result> Create([FromBody] CreateToppingRequest request, CancellationToken cancellationToken) => _mediator.Send(request, cancellationToken);
 
 
         [HttpDelete("{id}")]

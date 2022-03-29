@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 
 namespace ContosoPizza.Mediator.Commands.Requests
 {
-    public class UpdatePizzaRequest : IRequest<ResultOf<bool>>
+    public class UpdatePizzaRequest : IRequest<Result>
     {
         [JsonIgnore]
         [BindNever]

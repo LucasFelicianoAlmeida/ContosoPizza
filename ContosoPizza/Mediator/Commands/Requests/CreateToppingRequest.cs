@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 
 namespace ContosoPizza.Mediator.Commands.Requests
 {
-    public class CreateToppingRequest : IRequest<ResultOf<bool>>
+    public class CreateToppingRequest : IRequest<Result>
     {
         public string Name { get; set; }
         public decimal Price { get; set; }

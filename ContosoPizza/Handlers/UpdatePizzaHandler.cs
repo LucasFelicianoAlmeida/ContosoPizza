@@ -8,7 +8,7 @@ using Nudes.Retornator.Core;
 
 namespace ContosoPizza.Handlers
 {
-    public class UpdatePizzaHandler : IRequestHandler<UpdatePizzaRequest, ResultOf<bool>>
+    public class UpdatePizzaHandler : IRequestHandler<UpdatePizzaRequest, Result>
     {
         public ApplicationDbContext _context;
 
@@ -16,7 +16,7 @@ namespace ContosoPizza.Handlers
         {
             _context = context;
         }
-        public async Task<ResultOf<bool>> Handle(UpdatePizzaRequest request, CancellationToken cancellationToken)
+        public async Task<Result> Handle(UpdatePizzaRequest request, CancellationToken cancellationToken)
         {
             var pizza = await _context.Pizzas.FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
 
@@ -31,7 +31,7 @@ namespace ContosoPizza.Handlers
 
             await _context.SaveChangesAsync(cancellationToken); 
 
-            return true;
+            return Result.Success;
 
         }
     }

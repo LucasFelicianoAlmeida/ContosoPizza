@@ -7,7 +7,7 @@ using Nudes.Retornator.Core;
 
 namespace ContosoPizza.Handlers
 {
-    public class CreateToppingHandler : IRequestHandler<CreateToppingRequest, ResultOf<bool>>
+    public class CreateToppingHandler : IRequestHandler<CreateToppingRequest, Result>
     {
         public ApplicationDbContext _context;
         public CreateToppingHandler(ApplicationDbContext context)

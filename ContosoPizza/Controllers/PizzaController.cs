@@ -29,11 +29,11 @@ namespace ContosoPizza.Controllers
         public  Task<ResultOf<ReadPizzaResponse>> Get([FromRoute ] ReadPizzaRequest request, CancellationToken cancellationToken) => _mediator.Send(request, cancellationToken);
 
         [HttpPost]
-        public Task<ResultOf<bool>> Create([FromBody] CreatePizzaRequest pizzaRequest, CancellationToken cancellationToken) => _mediator.Send(pizzaRequest, cancellationToken);
+        public Task<Result> Create([FromBody] CreatePizzaRequest pizzaRequest, CancellationToken cancellationToken) => _mediator.Send(pizzaRequest, cancellationToken);
 
 
         [HttpPut("{id}")]
-        public Task<ResultOf<bool>> Update(int id, [FromBody] UpdatePizzaRequest pizza, CancellationToken cancellationToken)
+        public Task<Result> Update(int id, [FromBody] UpdatePizzaRequest pizza, CancellationToken cancellationToken)
         {
             pizza.Id = id;
             return _mediator.Send(pizza, cancellationToken);

@@ -7,7 +7,7 @@ using Nudes.Retornator.Core;
 
 namespace ContosoPizza.Handlers
 {
-    public class CreatePizzaHandler : IRequestHandler<CreatePizzaRequest, ResultOf<bool>>
+    public class CreatePizzaHandler : IRequestHandler<CreatePizzaRequest, Result>
     {
 
         private ApplicationDbContext _context;
