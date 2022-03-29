@@ -16,7 +16,7 @@ namespace ContosoPizza.Handlers
         }
 
 
-        public async Task<ResultOf<bool>> Handle(CreateToppingRequest request, CancellationToken cancellationToken)
+        public async Task<Result> Handle(CreateToppingRequest request, CancellationToken cancellationToken)
         {
 
             var topping = new Topping(request.Name, request.Price);
@@ -26,7 +26,7 @@ namespace ContosoPizza.Handlers
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return true;
+            return Result.Success;
 
         }
     }
