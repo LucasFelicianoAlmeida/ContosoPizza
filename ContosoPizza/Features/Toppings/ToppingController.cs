@@ -21,30 +21,30 @@ namespace ContosoPizza.Features.Toppings
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Topping>>> GetAll(CancellationToken cancellationToken) => Ok(await _mediator.Send(new ListToppingRequest(), cancellationToken));
+        public async Task<ActionResult<List<Topping>>> GetAll([FromQuery] ListToppingRequest request, CancellationToken cancellationToken) => Ok(await _mediator.Send(request, cancellationToken));
 
         [HttpGet("{Id}")]
-        public  Task<ResultOf<ReadToppingResponse>> Get([FromRoute] ReadToppingRequest request, CancellationToken cancellationToken) =>   _mediator.Send(request,cancellationToken);
+        public Task<ResultOf<ReadToppingResponse>> Get([FromRoute] ReadToppingRequest request, CancellationToken cancellationToken) => _mediator.Send(request, cancellationToken);
 
 
 
         [HttpPost]
-        public  Task<Result> Create([FromBody] CreateToppingRequest request, CancellationToken cancellationToken) => _mediator.Send(request, cancellationToken);
+        public Task<Result> Create([FromBody] CreateToppingRequest request, CancellationToken cancellationToken) => _mediator.Send(request, cancellationToken);
 
 
         [HttpDelete("{id}")]
-        public  Task<Result> Delete([FromRoute] int id, CancellationToken cancellationToken) => _mediator.Send(new DeleteToppingRequest() { Id = id }, cancellationToken);
+        public Task<Result> Delete([FromRoute] int id, CancellationToken cancellationToken) => _mediator.Send(new DeleteToppingRequest() { Id = id }, cancellationToken);
 
 
         [HttpPut("{id}")]
-        public  Task<Result> Update(int id, [FromBody] UpdateToppingRequest request, CancellationToken cancellationToken)
+        public Task<Result> Update(int id, [FromBody] UpdateToppingRequest request, CancellationToken cancellationToken)
         {
             request.Id = id;
             return _mediator.Send(request, cancellationToken);
         }
-            
 
-      
+
+
 
 
     }

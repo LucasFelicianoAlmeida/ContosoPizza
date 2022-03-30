@@ -17,14 +17,25 @@ namespace ContosoPizza.Features.Pizzas.List
 
         public async Task<ResultOf<List<ListPizzaResponse>>> Handle(ListPizzaRequest request, CancellationToken cancellationToken)
         {
-
-            var pizzas = await _context.Pizzas.Select(p => new ListPizzaResponse
+            var pizzaQuery = _context.Pizzas.AsQueryable();
+            if (request.IsGlutenFreeFilter.HasValue)
             {
-                Id = p.Id,
-                IsGlutenFree = p.IsGlutenFree,
-                Name = p.Name,
-                Price = p.Price
-            }).ToListAsync(cancellationToken);
+                pizzaQuery.Where(x => x.IsGlutenFree == true);
+            }
+
+            if (request.FilterByName != null)
+            {
+                pizzaQuery.Where(x => x.Name.ToUpper().Contains(request.FilterByName.ToUpper()));
+            }
+
+            List<ListPizzaResponse> pizzas = await pizzaQuery.Skip((request.PageNumber - 1) * request.Quantity).Take(request.Quantity).Select(p => new ListPizzaResponse
+                {
+                    Id = p.Id,
+                    IsGlutenFree = p.IsGlutenFree,
+                    Name = p.Name,
+                    Price = p.Price
+                }).ToListAsync(cancellationToken);
+
 
             return pizzas;
         }

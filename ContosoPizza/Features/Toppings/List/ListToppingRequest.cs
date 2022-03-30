@@ -6,5 +6,9 @@ namespace ContosoPizza.Features.Toppings.List
 {
     public class ListToppingRequest : IRequest<ResultOf<List<ListToppingResponse>>>
     {
+        public int PageNumber { get; set; }
+        public int Quantity { get; set; }
+        public string FilterByName { get; set; }
+        public decimal Price { get; set; }
     }
 }
