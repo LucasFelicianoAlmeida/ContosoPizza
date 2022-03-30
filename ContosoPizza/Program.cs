@@ -3,8 +3,7 @@ using MediatR;
 using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore.Design;
 using PipelineBehavior;
-using ContosoPizza.Mediator.Requests;
-using ContosoPizza.Mediator.Responses;
+
 using FluentValidation;
 using ContosoPizza.Context;
 using Microsoft.EntityFrameworkCore;
