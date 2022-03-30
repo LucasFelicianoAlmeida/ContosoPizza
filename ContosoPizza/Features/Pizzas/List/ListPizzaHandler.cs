@@ -20,21 +20,21 @@ namespace ContosoPizza.Features.Pizzas.List
             var pizzaQuery = _context.Pizzas.AsQueryable();
             if (request.IsGlutenFreeFilter.HasValue)
             {
-                pizzaQuery.Where(x => x.IsGlutenFree == true);
+                pizzaQuery = pizzaQuery.Where(x => x.IsGlutenFree == request.IsGlutenFreeFilter);
             }
 
-            if (request.FilterByName != null)
+            if (!String.IsNullOrWhiteSpace(request.FilterByName))
             {
-                pizzaQuery.Where(x => x.Name.ToUpper().Contains(request.FilterByName.ToUpper()));
+                pizzaQuery = pizzaQuery.Where(x => x.Name.Contains(request.FilterByName));
             }
 
             List<ListPizzaResponse> pizzas = await pizzaQuery.Skip((request.PageNumber - 1) * request.Quantity).Take(request.Quantity).Select(p => new ListPizzaResponse
-                {
-                    Id = p.Id,
-                    IsGlutenFree = p.IsGlutenFree,
-                    Name = p.Name,
-                    Price = p.Price
-                }).ToListAsync(cancellationToken);
+            {
+                Id = p.Id,
+                IsGlutenFree = p.IsGlutenFree,
+                Name = p.Name,
+                Price = p.Price
+            }).ToListAsync(cancellationToken);
 
 
             return pizzas;

@@ -9,6 +9,6 @@ namespace ContosoPizza.Features.Toppings.List
         public int PageNumber { get; set; }
         public int Quantity { get; set; }
         public string FilterByName { get; set; }
-        public decimal Price { get; set; }
+        public decimal? Price { get; set; }
     }
 }
