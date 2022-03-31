@@ -21,16 +21,15 @@ namespace ContosoPizza.Features.Toppings.List
             var toppingQuery = _context.Toppings.AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(request.FilterByName))
-            {
                 toppingQuery = toppingQuery.Where(x => x.Name.Contains(request.FilterByName));
-            }
 
-            if (request.Price.HasValue)
-            {
-                toppingQuery = toppingQuery.Where(x => x.Price == request.Price);
-            }
+            if (request.MinimunPrice.HasValue)
+                toppingQuery = toppingQuery.Where(x => x.Price >= request.MinimunPrice);
 
-            var listToppings = await toppingQuery.Skip(request.Quantity * (request.PageNumber - 1)).Take(request.Quantity)
+            if (request.MaximumPrice.HasValue)
+                toppingQuery = toppingQuery.Where(x => x.Price <= request.MaximumPrice);
+
+            var listToppings = await toppingQuery.OrderBy(x => x.Name).Skip(request.Quantity * (request.PageNumber - 1)).Take(request.Quantity)
                 .Select(t => new ListToppingResponse
                 {
                     Id = t.Id,

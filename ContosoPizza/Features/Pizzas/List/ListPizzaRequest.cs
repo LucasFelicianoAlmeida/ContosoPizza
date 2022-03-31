@@ -7,6 +7,8 @@ namespace ContosoPizza.Features.Pizzas.List
     {
         public int PageNumber { get; set; }
         public int Quantity { get; set; }
+        public int? MaximumPrice { get; set; }
+        public int? MinimumPrice { get; set; }
         public string FilterByName { get; set; }
         public bool? IsGlutenFreeFilter { get; set; }
     }
