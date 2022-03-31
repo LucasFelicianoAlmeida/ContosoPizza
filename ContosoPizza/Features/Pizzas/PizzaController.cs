@@ -22,7 +22,7 @@ namespace ContosoPizza.Features.Pizzas
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Pizza>>> GetAll(CancellationToken cancellationToken) => Ok(await _mediator.Send(new ListPizzaRequest(), cancellationToken));
+        public async Task<ActionResult<List<Pizza>>> GetAll([FromQuery] ListPizzaRequest request, CancellationToken cancellationToken) => Ok(await _mediator.Send(request, cancellationToken));
 
 
         //GetById

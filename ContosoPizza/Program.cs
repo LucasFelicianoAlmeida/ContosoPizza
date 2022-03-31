@@ -16,7 +16,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     var connection = builder.Configuration.GetConnectionString("DefaultConnection");
-    options.UseSqlServer(connection);
+    options.UseSqlServer(connection).EnableDetailedErrors(true).EnableSensitiveDataLogging(true);
 });
 
 builder.Services.AddControllers();
@@ -30,7 +30,7 @@ builder.Services.AddControllers().AddRetornator();
 builder.Services.AddErrorTranslator(ErrorHttpTranslatorBuilder.Default);
 
 //MediatR DI
-builder.Services.AddMediatR(Assembly.GetEntryAssembly()) 
+builder.Services.AddMediatR(Assembly.GetEntryAssembly())
 .AddFluentValidation();
 
 ////PipelineBehavior
@@ -54,4 +54,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+
 app.Run();
+

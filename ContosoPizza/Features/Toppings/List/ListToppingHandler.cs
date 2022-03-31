@@ -18,12 +18,25 @@ namespace ContosoPizza.Features.Toppings.List
         }
         public async Task<ResultOf<List<ListToppingResponse>>> Handle(ListToppingRequest request, CancellationToken cancellationToken)
         {
-            var listToppings = await _context.Toppings.Select(t => new ListToppingResponse
-            {
-                Id = t.Id, 
-                Name = t.Name,
-                Price = t.Price
-            }).ToListAsync(cancellationToken);
+            var toppingQuery = _context.Toppings.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(request.FilterByName))
+                toppingQuery = toppingQuery.Where(x => x.Name.Contains(request.FilterByName));
+
+            if (request.MinimunPrice.HasValue)
+                toppingQuery = toppingQuery.Where(x => x.Price >= request.MinimunPrice);
+
+            if (request.MaximumPrice.HasValue)
+                toppingQuery = toppingQuery.Where(x => x.Price <= request.MaximumPrice);
+
+            var listToppings = await toppingQuery.OrderBy(x => x.Name).Skip(request.Quantity * (request.PageNumber - 1)).Take(request.Quantity)
+                .Select(t => new ListToppingResponse
+                {
+                    Id = t.Id,
+                    Name = t.Name,
+                    Price = t.Price
+                }).ToListAsync(cancellationToken);
+
 
             return listToppings;
         }
