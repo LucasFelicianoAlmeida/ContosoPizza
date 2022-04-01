@@ -5,6 +5,5 @@
         public int Id { get; set; }
         public int IdTopping { get; set; }
         public int IdOrderItem { get; set; }
-
     }
 }
