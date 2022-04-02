@@ -2,6 +2,8 @@ using ContosoPizza.Context;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Nudes.Retornator.Core;
+using Nudes.Paginator;
+using Nudes.Paginator.Core;
 
 namespace ContosoPizza.Features.Pizzas.List
 {
@@ -19,6 +21,8 @@ namespace ContosoPizza.Features.Pizzas.List
         {
             var pizzaQuery = _context.Pizzas.AsQueryable();
 
+            var p = await pizzaQuery.CountAsync();
+
             if (!string.IsNullOrWhiteSpace(request.FilterByName))
                 pizzaQuery = pizzaQuery.Where(x => x.Name.Contains(request.FilterByName));
 
@@ -31,16 +35,16 @@ namespace ContosoPizza.Features.Pizzas.List
             if (request.MinimumPrice.HasValue)
                 pizzaQuery = pizzaQuery.Where(x => x.Price >= request.MinimumPrice);
 
-            List<ListPizzaResponse> pizzas = await pizzaQuery.OrderBy(x => x.Name).Skip((request.PageNumber - 1) * request.Quantity).Take(request.Quantity).Select(p => new ListPizzaResponse
-            {
-                Id = p.Id,
-                IsGlutenFree = p.IsGlutenFree,
-                Name = p.Name,
-                Price = p.Price
-            }).ToListAsync(cancellationToken);
+            var items = await pizzaQuery.PaginateBy(request, p => p.Name)
+          .Select(x => new ListPizzaResponse
+          {
+              Name = x.Name,
+              Id = x.Id,
+              IsGlutenFree = x.IsGlutenFree,
+              Price = x.Price
+          }).ToListAsync();
 
-
-            return pizzas;
+            return items;
         }
     }
 }

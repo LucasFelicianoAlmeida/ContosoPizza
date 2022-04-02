@@ -29,7 +29,7 @@ namespace ContosoPizza.Features.Toppings.List
             if (request.MaximumPrice.HasValue)
                 toppingQuery = toppingQuery.Where(x => x.Price <= request.MaximumPrice);
 
-            var listToppings = await toppingQuery.OrderBy(x => x.Name).Skip(request.Quantity * (request.PageNumber - 1)).Take(request.Quantity)
+            var listToppings = await toppingQuery.PaginateBy(request,t => t.Name)
                 .Select(t => new ListToppingResponse
                 {
                     Id = t.Id,
