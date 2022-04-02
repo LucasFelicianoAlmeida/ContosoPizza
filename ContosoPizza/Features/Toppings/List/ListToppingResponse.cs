@@ -1,6 +1,8 @@
-﻿namespace ContosoPizza.Features.Toppings.List
+﻿using Nudes.Paginator.Core;
+
+namespace ContosoPizza.Features.Toppings.List
 {
-    public class ListToppingResponse
+    public class ListToppingResponse 
     {
         public int Id { get; set; }
         public string Name { get; set; }

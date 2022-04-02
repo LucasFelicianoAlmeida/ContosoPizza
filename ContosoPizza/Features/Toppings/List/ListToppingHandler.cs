@@ -4,11 +4,12 @@
 using ContosoPizza.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Nudes.Paginator.Core;
 using Nudes.Retornator.Core;
 
 namespace ContosoPizza.Features.Toppings.List
 {
-    public class ListToppingHandler : IRequestHandler<ListToppingRequest, ResultOf<List<ListToppingResponse>>>
+    public class ListToppingHandler : IRequestHandler<ListToppingRequest, ResultOf<PageResult<ListToppingResponse>>>
     {
         public ApplicationDbContext _context;
 
@@ -16,7 +17,7 @@ namespace ContosoPizza.Features.Toppings.List
         {
             _context = context;
         }
-        public async Task<ResultOf<List<ListToppingResponse>>> Handle(ListToppingRequest request, CancellationToken cancellationToken)
+        public async Task<ResultOf<PageResult<ListToppingResponse>>> Handle(ListToppingRequest request, CancellationToken cancellationToken)
         {
             var toppingQuery = _context.Toppings.AsQueryable();
 
@@ -37,8 +38,11 @@ namespace ContosoPizza.Features.Toppings.List
                     Price = t.Price
                 }).ToListAsync(cancellationToken);
 
+            var total = await toppingQuery.CountAsync(cancellationToken);
 
-            return listToppings;
+            var result = new PageResult<ListToppingResponse>(request, total, listToppings);
+
+            return result;
         }
     }
 }
