@@ -2,10 +2,12 @@ using ContosoPizza.Context;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Nudes.Retornator.Core;
+using Nudes.Paginator;
+using Nudes.Paginator.Core;
 
 namespace ContosoPizza.Features.Pizzas.List
 {
-    public class ListPizzaHandler : IRequestHandler<ListPizzaRequest, ResultOf<List<ListPizzaResponse>>>
+    public class ListPizzaHandler : IRequestHandler<ListPizzaRequest, ResultOf<PageResult<ListPizzaResponse>>>
     {
         public ApplicationDbContext _context;
 
@@ -15,7 +17,7 @@ namespace ContosoPizza.Features.Pizzas.List
         }
 
 
-        public async Task<ResultOf<List<ListPizzaResponse>>> Handle(ListPizzaRequest request, CancellationToken cancellationToken)
+        public async Task<ResultOf<PageResult<ListPizzaResponse>>> Handle(ListPizzaRequest request, CancellationToken cancellationToken)
         {
             var pizzaQuery = _context.Pizzas.AsQueryable();
 
@@ -31,16 +33,20 @@ namespace ContosoPizza.Features.Pizzas.List
             if (request.MinimumPrice.HasValue)
                 pizzaQuery = pizzaQuery.Where(x => x.Price >= request.MinimumPrice);
 
-            List<ListPizzaResponse> pizzas = await pizzaQuery.OrderBy(x => x.Name).Skip((request.PageNumber - 1) * request.Quantity).Take(request.Quantity).Select(p => new ListPizzaResponse
-            {
-                Id = p.Id,
-                IsGlutenFree = p.IsGlutenFree,
-                Name = p.Name,
-                Price = p.Price
-            }).ToListAsync(cancellationToken);
+            var toppingsList = await pizzaQuery.PaginateBy(request, p => p.Name)
+                  .Select(x => new ListPizzaResponse
+                  {
+                      Name = x.Name,
+                      Id = x.Id,
+                      IsGlutenFree = x.IsGlutenFree,
+                      Price = x.Price
+                  }).ToListAsync(cancellationToken);
 
+            var total = await pizzaQuery.CountAsync(cancellationToken);
 
-            return pizzas;
+            var result = new PageResult<ListPizzaResponse>(request, total, toppingsList);
+
+            return result;
         }
     }
 }
