@@ -1,9 +1,9 @@
 ﻿namespace ContosoPizza.Models
 {
-    public class Item_Topping
+    public class OrderTopping
     {
         public int Id { get; set; }
         public int IdTopping { get; set; }
-        public int IdOrderItem { get; set; }
+        public OrderItem OrderItem   { get; set; }
     }
 }
