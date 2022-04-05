@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ContosoPizza.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220404194348_OrderMigration")]
+    [Migration("20220405140808_OrderMigration")]
     partial class OrderMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -31,9 +31,6 @@ namespace ContosoPizza.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("IdUser")
-                        .HasColumnType("int");
 
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
@@ -55,12 +52,6 @@ namespace ContosoPizza.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("IdOrder")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IdPizza")
-                        .HasColumnType("int");
 
                     b.Property<int?>("OrderId")
                         .HasColumnType("int");
@@ -84,9 +75,6 @@ namespace ContosoPizza.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("IdTopping")
-                        .HasColumnType("int");
 
                     b.Property<int?>("OrderItemId")
                         .HasColumnType("int");

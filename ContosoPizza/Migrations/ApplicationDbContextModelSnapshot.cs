@@ -30,9 +30,6 @@ namespace ContosoPizza.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("IdUser")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
 
@@ -53,12 +50,6 @@ namespace ContosoPizza.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("IdOrder")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IdPizza")
-                        .HasColumnType("int");
 
                     b.Property<int?>("OrderId")
                         .HasColumnType("int");
@@ -82,9 +73,6 @@ namespace ContosoPizza.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("IdTopping")
-                        .HasColumnType("int");
 
                     b.Property<int?>("OrderItemId")
                         .HasColumnType("int");
