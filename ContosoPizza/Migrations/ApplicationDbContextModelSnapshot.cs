@@ -33,7 +33,7 @@ namespace ContosoPizza.Migrations
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("UserId")
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -51,10 +51,10 @@ namespace ContosoPizza.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int?>("OrderId")
+                    b.Property<int>("OrderId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("PizzaId")
+                    b.Property<int>("PizzaId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -74,7 +74,7 @@ namespace ContosoPizza.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int?>("OrderItemId")
+                    b.Property<int>("OrderItemId")
                         .HasColumnType("int");
 
                     b.Property<int?>("ToppingId")
@@ -159,7 +159,9 @@ namespace ContosoPizza.Migrations
                 {
                     b.HasOne("ContosoPizza.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("User");
                 });
@@ -167,12 +169,16 @@ namespace ContosoPizza.Migrations
             modelBuilder.Entity("ContosoPizza.Models.OrderItem", b =>
                 {
                     b.HasOne("ContosoPizza.Models.Order", "Order")
-                        .WithMany("Order_Items")
-                        .HasForeignKey("OrderId");
+                        .WithMany("OrderItems")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("ContosoPizza.Models.Pizza", "Pizza")
                         .WithMany()
-                        .HasForeignKey("PizzaId");
+                        .HasForeignKey("PizzaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Order");
 
@@ -183,7 +189,9 @@ namespace ContosoPizza.Migrations
                 {
                     b.HasOne("ContosoPizza.Models.OrderItem", "OrderItem")
                         .WithMany("Toppings")
-                        .HasForeignKey("OrderItemId");
+                        .HasForeignKey("OrderItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("ContosoPizza.Models.Topping", null)
                         .WithMany("OrderToppings")
@@ -194,7 +202,7 @@ namespace ContosoPizza.Migrations
 
             modelBuilder.Entity("ContosoPizza.Models.Order", b =>
                 {
-                    b.Navigation("Order_Items");
+                    b.Navigation("OrderItems");
                 });
 
             modelBuilder.Entity("ContosoPizza.Models.OrderItem", b =>

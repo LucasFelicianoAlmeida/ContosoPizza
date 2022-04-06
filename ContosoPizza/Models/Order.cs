@@ -6,6 +6,6 @@
         public DateTime OrderDate { get; set; }
         public int UserId { get; set; }
         public User User { get; set; }
-        public ICollection<OrderItem> Order_Items { get; set; }
+        public ICollection<OrderItem> OrderItems { get; set; }
     }
 }
