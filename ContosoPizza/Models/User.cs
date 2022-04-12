@@ -5,13 +5,10 @@
         public int Id { get; set; }
         public string Name { get; set; }
         public string Surname { get; set; }
+        public int UserTypeId { get; set; }
         public DateTime BirthDate { get; set; }
-        public TypeUser Role { get; set; }
+        public virtual UserType Role { get; set; }
     }
 
-    public enum TypeUser
-    {
-        Employee,
-        Client
-    }
+   
 }

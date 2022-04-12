@@ -4,6 +4,6 @@
     {
         public int Id { get; set; }
         public int OrderItemId { get; set; }
-        public OrderItem OrderItem   { get; set; }
+        public virtual OrderItem OrderItem   { get; set; }
     }
 }
